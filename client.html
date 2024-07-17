@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	html,
+	body {
+		height: 100%;
+	}
+
+	/* Scale canvas with resize attribute to full size */
+	canvas[resize] {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+<script type="text/javascript" src="/home/andrelongon/Documents/llm_experiments/jquery-3.7.1.js"></script>
+
+<script type="text/javascript">
+    function ask_agent(question) {
+        return result = $.ajax({
+            type: "POST",
+            url: "http://130.39.95.240:8000/agent_server.py",
+            contentType: "application/json",
+            async: false,
+            data: JSON.stringify({
+                question: question
+            })
+        }).responseJSON;
+    }
+
+    $(document).ready(function() { 
+        $('#agent_ask').click(function() {
+            if ($('#question').val() != "") {
+                var response = ask_agent($('#question').val());
+                console.log(response)
+                document.getElementById("result").innerHTML = response["llm_response"];
+            }
+        }); 
+    });
+</script>
+</head>
+
+<body>
+	<!-- <canvas id="myCanvas" resize="true"></canvas>
+	<div id="svgContainer"></div>
+	<div id="hiddenStateContainer"></div> -->
+
+    <label for="Agent">Ask Agent:</label>
+    <br><br>
+    <textarea id="question" name="question" rows="4" cols="50"></textarea>
+    <button id="agent_ask">Ask</button>
+    <br><br>
+    <p> 
+        <div id="result"></div> 
+    </p> 
+</body>
+</html>
